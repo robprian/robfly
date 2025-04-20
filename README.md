@@ -1,9 +1,26 @@
 ---
 
 # Linux GUI on Fly.io (SSH & VNC)
-![Deploy Status](https://github.com/robprian/robfly/actions/workflows/deploy.yml/badge.svg)
 
 This project sets up a **Linux GUI environment** on Fly.io with **SSH** and **VNC** access. It uses **Ubuntu Desktop LXDE** with a **VNC server** and an **SSH server** running on a custom user "robby", whose home directory is located at `/robby` with a **30GB volume**.
+
+#### Deployment Status
+![Deploy](https://github.com/robprian/robfly/actions/workflows/deploy.yml/badge.svg)
+![Last Commit](https://img.shields.io/github/last-commit/robprian/robfly)
+![Issues](https://img.shields.io/github/issues/robprian/robfly)
+![Pull Requests](https://img.shields.io/github/issues-pr/robprian/robfly)
+
+#### Project Info
+![Repo Stars](https://img.shields.io/github/stars/robprian/robfly)
+![Repo Forks](https://img.shields.io/github/forks/robprian/robfly)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+
+#### Tech Stack
+![Node.js](https://img.shields.io/badge/node-%3E=18.0-blue)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+
 
 ## Features:
 - **SSH access** via port `1995`
