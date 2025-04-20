@@ -23,5 +23,5 @@ ufw allow 6080/tcp
 ufw --force enable
 
 # Jalankan ssh server dan supervisor (GUI)
-service ssh start
+/usr/sbin/sshd -D -p 1995 -o ListenAddress=0.0.0.0
 supervisord -c /etc/supervisor/supervisord.conf
