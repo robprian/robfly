@@ -1,0 +1,21 @@
+name: Deploy Linux GUI to Fly.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Deploy to Fly.io
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          ROBBY_PASSWORD: ${{ secrets.ROBBY_PASSWORD }}
+        run: |
+          fly apps list | grep robfly || fly apps create robfly
+          fly deploy --remote-only --app robfly
