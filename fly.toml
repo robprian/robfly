@@ -1,0 +1,27 @@
+app = "robfly"
+primary_region = "lax"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+
+[vm]
+  size = "performance-4x"
+
+[[mounts]]
+  source = "robby_data"
+  destination = "/robby"
+  initial_size = "30gb"
+
+[[services]]
+  internal_port = 1995
+  protocol = "tcp"
+  [[services.ports]]
+    port = 1995
+
+[[services]]
+  internal_port = 6080
+  protocol = "tcp"
+  [[services.ports]]
+    port = 6080
