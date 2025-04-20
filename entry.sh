@@ -1,36 +1,27 @@
 #!/bin/bash
 
-# Cek env var password
-if [ -z "$ROBBY_PASSWORD" ]; then
-  echo "ERROR: ROBBY_PASSWORD environment variable is not set!"
-  exit 1
+# Init SSH password dari GitHub Secret
+echo "robby:${SSH_PASSWORD}" | chpasswd
+
+# Buat symlink SSH config ke volume
+ln -s /robby/ssh /etc/ssh
+
+# Generate SSH host keys jika belum ada
+if [ ! -f /robby/ssh/ssh_host_rsa_key ]; then
+    ssh-keygen -A
+    cp /etc/ssh/* /robby/ssh/
 fi
 
-# Create user 'robby' with password from env
-echo ">> Creating user robby with password from env..."
-useradd -m -s /bin/bash robby
-echo "robby:$ROBBY_PASSWORD" | chpasswd
-adduser robby sudo
+# Aktifkan SSH server di port 1995
+sed -i 's/#Port 22/Port 1995/' /robby/ssh/sshd_config
+sed -i 's@/home/robby@/robby@g' /robby/ssh/sshd_config
 
-# Configure SSH and noVNC ports
-echo ">> Starting SSH on port 1995..."
-service ssh start
-
-echo ">> Starting VNC server for user 'robby'..."
-sudo -u robby vncserver :1 -geometry ${VNC_RESOLUTION:-1024x768}
-
-echo ">> Starting noVNC on port 6080..."
-/usr/share/novnc/utils/novnc_proxy --vnc localhost:5901 --listen 6080 &
-
-# Configure firewall - block all ports except SSH (1995) and noVNC (6080)
-echo ">> Configuring firewall..."
-ufw default deny incoming
-ufw default allow outgoing
+# UFW rules: hanya allow 1995 (SSH) dan 6080 (VNC)
+ufw --force reset
 ufw allow 1995/tcp
 ufw allow 6080/tcp
-ufw enable
+ufw --force enable
 
-echo ">> Firewall configured: Allowed ports - 1995 (SSH), 6080 (noVNC)"
-
-# Keep container running
-tail -f /dev/null
+# Jalankan ssh server dan supervisor (GUI)
+service ssh start
+supervisord -c /etc/supervisor/supervisord.conf
