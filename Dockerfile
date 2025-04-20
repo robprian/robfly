@@ -1,5 +1,8 @@
 FROM dorowu/ubuntu-desktop-lxde-vnc
 
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+
 # Install packages
 RUN apt-get update && apt-get install -y \
     openssh-server \
