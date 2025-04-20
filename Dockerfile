@@ -1,28 +1,32 @@
-FROM debian:bullseye
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM dorowu/ubuntu-desktop-lxde-vnc
 
 # Install packages
-RUN apt update && apt install -y \
-    sudo wget curl vim git gnupg net-tools iputils-ping \
-    unzip software-properties-common \
-    build-essential libssl-dev libffi-dev python3-dev \
-    xfce4 tightvncserver dbus-x11 x11-xserver-utils \
-    openssh-server websockify novnc \
-    && apt clean
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    curl \
+    wget \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    net-tools \
+    iproute2 \
+    iputils-ping \
+    ufw \
+    && rm -rf /var/lib/apt/lists/*
 
-# Setup SSH port config
-RUN mkdir /var/run/sshd && \
-    sed -i 's/#Port 22/Port 1995/' /etc/ssh/sshd_config && \
-    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+# Create /robby as the full home + ssh + data base
+RUN useradd -m -d /robby -s /bin/bash robby \
+    && mkdir -p /robby/ssh \
+    && chown -R robby:robby /robby
 
-# Expose all ports including SSH and noVNC
-EXPOSE 1-65535
-EXPOSE 1995 6080 5901
+# Remove default ssh config, we'll link it later
+RUN rm -rf /etc/ssh
 
-# Copy entrypoint
+# Copy entry script
 COPY entry.sh /entry.sh
 RUN chmod +x /entry.sh
+
+# Expose all ports (will be filtered by ufw inside)
+EXPOSE 1-65535
 
 CMD ["/entry.sh"]
