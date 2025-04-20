@@ -28,6 +28,6 @@ jobs:
       
       - name: Tambah IPv4 Publik
         run: |
-          fly ips allocate-v4 --app robfly || echo "IPv4 sudah ada atau gagal allocate"
+          fly ips allocate-v4 --app robfly --yes || echo "IPv4 sudah ada atau gagal allocate"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
