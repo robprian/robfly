@@ -26,7 +26,7 @@ jobs:
           fly volumes create robby_data --region lax --size 30 --app robfly || true
           fly deploy --remote-only
       
-      - - name: Tambah IPv4 Publik jika belum ada
+      - name: Tambah IPv4 Publik jika belum ada
         run: |
           echo "Cek IPv4 Fly.io..."
           IPV4=$(fly ips list -a robfly | grep -m1 'v4' | awk '{print $1}')
