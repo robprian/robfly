@@ -1,8 +1,7 @@
 ---
 
-✅ README.md
-
 # Linux GUI on Fly.io (SSH & VNC)
+![Deploy Status](https://github.com/robprian/robfly/actions/workflows/deploy.yml/badge.svg)
 
 This project sets up a **Linux GUI environment** on Fly.io with **SSH** and **VNC** access. It uses **Ubuntu Desktop LXDE** with a **VNC server** and an **SSH server** running on a custom user "robby", whose home directory is located at `/robby` with a **30GB volume**.
 
